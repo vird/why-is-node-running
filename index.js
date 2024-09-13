@@ -1,7 +1,7 @@
-import { createHook } from 'node:async_hooks'
-import { readFileSync } from 'node:fs'
-import { relative } from 'node:path'
-import { fileURLToPath } from 'node:url'
+const {createHook} = require('node:async_hooks')
+const {readFileSync} = require('node:fs')
+const {relative} = require('node:path')
+const {fileURLToPath} = require('node:url')
 
 const IGNORED_TYPES = [
   'TIMERWRAP',
@@ -32,7 +32,7 @@ const hook = createHook({
 
 hook.enable()
 
-export default function whyIsNodeRunning (logger = console) {
+function whyIsNodeRunning (logger = console) {
   hook.disable()
 
   const activeAsyncResources = Array.from(asyncResources.values())
@@ -44,6 +44,7 @@ export default function whyIsNodeRunning (logger = console) {
     printStacks(asyncResource, logger)
   }
 }
+module.exports = whyIsNodeRunning
 
 function printStacks (asyncResource, logger) {
   const stacks = asyncResource.stacks.filter((stack) => !stack.getFileName().startsWith('node:'))
